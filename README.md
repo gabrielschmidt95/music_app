@@ -40,7 +40,30 @@ This is a music application built using Flutter. It allows users to listen to th
     >> assets/.env
     ```
 
-4. Run the application:
+5. For IOS only
+
+Add the following to your Info.plist file, located in <project root>/ios/Runner/Info.plist:
+    [Google Sign-in for iOS](https://developers.google.com/identity/sign-in/ios/start-integrating)
+    [Firebase Installation](https://firebase.flutter.dev/docs/manual-installation/ios/)
+    [Firebase Google Sign-in](https://firebase.flutter.dev/docs/auth/social#google)
+    ```
+    <!-- Google Sign-in Section -->
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>YOUR FIREBASE REVERSED_CLIENT_ID</string>
+				</array>
+			</dict>
+		</array>
+		<!-- End of the Google Sign-in Section -->
+    ```
+
+
+5. Run the application:
 
     ```bash
     flutter run
