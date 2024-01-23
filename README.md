@@ -35,9 +35,9 @@ This is a music application built using Flutter. It allows users to listen to th
 
 ## Screenshots
 
-![Screenshot 1](screenshots/screenshot1.png)
-![Screenshot 2](screenshots/screenshot2.png)
-![Screenshot 3](screenshots/screenshot3.png)
+Artists Screen            |  Artists Albuns Screeen          |  Album Details Screen
+:-------------------------:|:-------------------------:| :-------------------------:
+![](screenshots/screenshot1.png)  |  ![](screenshots/screenshot2.png) | ![](screenshots/screenshot3.png)
 
 ## Contributing
 
