@@ -6,7 +6,7 @@ import 'views/album_view.dart';
 import 'views/albums_view.dart';
 import 'views/artist_view.dart';
 import 'views/handle_album.dart';
-import 'views/auth_view.dart';
+import 'views/main_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
@@ -83,7 +83,9 @@ class MyApp extends StatelessWidget {
                     return const ArtistListView();
                   case AuthView.routeName:
                   default:
-                    return const AuthView();
+                    return settingsController.user == null
+                        ? AuthView(controller: settingsController,)
+                        : const ArtistListView();
                 }
               },
             );

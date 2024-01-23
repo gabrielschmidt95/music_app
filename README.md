@@ -27,6 +27,19 @@ This is a music application built using Flutter. It allows users to listen to th
     flutter pub get
     ```
 
+4. Add .env file in assets folder
+
+    ```bash
+    echo \
+    OAUTH_CLIENT_ID= \
+    OAUTH_CLIENT_SECRET= \
+    OAUTH_AUDIENCE= \
+    OAUTH_DOMAIN= \
+    API_DOMAIN= \
+    DISCOGS_TOKEN= \
+    >> assets/.env
+    ```
+
 4. Run the application:
 
     ```bash

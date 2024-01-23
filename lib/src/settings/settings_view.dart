@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'settings_controller.dart';
+import 'settings_service.dart';
+import '../views/main_view.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -13,56 +15,128 @@ class SettingsView extends StatelessWidget {
 
   final SettingsController controller;
 
+  Widget container(Widget child) {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            color: Colors.black26,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          height: 50,
+          child: child,
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        // Glue the SettingsController to the theme selection DropdownButton.
-        //
-        // When a user selects a theme from the dropdown list, the
-        // SettingsController is updated, which rebuilds the MaterialApp.
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
-            color: Colors.black26,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const Text(
-                'Theme',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(width: 8),
-              DropdownButton<ThemeMode>(
-                // Read the selected themeMode from the controller
-                value: controller.themeMode,
-                // Call the updateThemeMode method any time the user selects a theme.
-                onChanged: controller.updateThemeMode,
-                items: const [
-                  DropdownMenuItem(
-                    value: ThemeMode.system,
-                    child: Text('System Theme'),
+      body: controller.user == null
+          ? const SizedBox(
+              width: 15,
+            )
+          : Padding(
+              padding: const EdgeInsets.all(16),
+              // Glue the SettingsController to the theme selection DropdownButton.
+              //
+              // When a user selects a theme from the dropdown list, the
+              // SettingsController is updated, which rebuilds the MaterialApp.
+              child: Column(
+                children: [
+                  Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(controller.user!.photoURL!),
+                      ),
+                    ),
                   ),
-                  DropdownMenuItem(
-                    value: ThemeMode.light,
-                    child: Text('Light Theme'),
+                  const SizedBox(height: 16),
+                  container(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Text(
+                          'Usuario',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(controller.user!.displayName!),
+                      ],
+                    ),
                   ),
-                  DropdownMenuItem(
-                    value: ThemeMode.dark,
-                    child: Text('Dark Theme'),
-                  )
+                  container(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Text(
+                          'Email',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(controller.user!.email!),
+                      ],
+                    ),
+                  ),
+                  container(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Text(
+                          'Theme',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 8),
+                        DropdownButton<ThemeMode>(
+                          // Read the selected themeMode from the controller
+                          value: controller.themeMode,
+                          // Call the updateThemeMode method any time the user selects a theme.
+                          onChanged: controller.updateThemeMode,
+                          items: const [
+                            DropdownMenuItem(
+                              value: ThemeMode.system,
+                              child: Text('System Theme'),
+                            ),
+                            DropdownMenuItem(
+                              value: ThemeMode.light,
+                              child: Text('Light Theme'),
+                            ),
+                            DropdownMenuItem(
+                              value: ThemeMode.dark,
+                              child: Text('Dark Theme'),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Logot button
+                  ElevatedButton(
+                    onPressed: () {
+                      controller.signOut();
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          AuthView.routeName, (Route<dynamic> route) => false);
+                    },
+                    child: const Text('Logout'),
+                  ),
                 ],
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
