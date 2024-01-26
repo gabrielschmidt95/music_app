@@ -58,8 +58,7 @@ class DiscogsAPI {
           "release_title": album.title,
         };
         final responseFiltered = await discogsRequest(queryParametersFiltered);
-        var dataFiltered =
-            jsonDecode(responseFiltered.body)["results"];
+        var dataFiltered = jsonDecode(responseFiltered.body)["results"];
         if (dataFiltered.isEmpty) {
           return Discogs.fromJSON({});
         }
@@ -81,6 +80,63 @@ class DiscogsAPI {
       return discogsData;
     } else {
       throw Exception('Failed to load album');
+    }
+  }
+
+  Future<Discogs> getById(String discogsId) async {
+    final queryParameters = {
+      "token": tokenDiscogs,
+    };
+    try {
+      discogsId = discogsId.replaceAll(RegExp(r'[^0-9]'), '');
+
+      final response = await http
+          .get(
+            Uri.https(
+                'api.discogs.com', '/releases/$discogsId', queryParameters),
+          )
+          .timeout(const Duration(seconds: 30));
+
+      var data = jsonDecode(response.body);
+
+      if (data["message"] != null) {
+        throw Exception(data["message"]);
+      }
+
+      Discogs discogsData = Discogs(
+        data["country"] ?? "",
+        data["id"] ?? 0,
+        data["type"] ?? "",
+        data["master_id"] ?? 0,
+        data["master_url"] ?? "",
+        data["uri"] ?? "",
+        data["catno"] ?? "",
+        data["title"] ?? "",
+        data["thumb"] ?? "",
+        data["images"][0]["uri"] ?? "",
+        data["resource_url"] ?? "",
+        data["format_quantity"] ?? 0,
+        [],
+        1,
+        [],
+      );
+
+      discogsData.urls = [
+        Urls(
+          data["id"],
+          "/release${data["uri"].substring(data["uri"].lastIndexOf("/"))}",
+        )
+      ];
+
+      for (var i = 0; i < data["tracklist"].length; i++) {
+        discogsData.tracks.add(
+          Tracks.fromJSON(data["tracklist"][i]),
+        );
+      }
+
+      return discogsData;
+    } catch (e) {
+      return Discogs.fromJSON({});
     }
   }
 }

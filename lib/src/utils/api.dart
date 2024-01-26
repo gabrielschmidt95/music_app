@@ -84,7 +84,7 @@ class API {
       uri = Uri.https(apiURL, "/update/album");
     }
 
-    if (album.discogs.id != "") {
+    if (album.discogs.id == 0) {
       album.discogs = await discogs.get(album);
     }
 

@@ -62,10 +62,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             brightness: Brightness.light,
             primaryColor: Colors.white,
+            hintColor: Colors.black,
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
             primaryColor:  Colors.black26,
+            hintColor: Colors.white,
           ),
           themeMode: settingsController.themeMode,
 

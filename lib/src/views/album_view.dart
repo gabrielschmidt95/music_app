@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:music_app/src/models/album.dart';
+import 'package:music_app/src/utils/discogs.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'handle_album.dart';
 import '../utils/api.dart';
@@ -19,18 +20,20 @@ class AlbumItemDetailsView extends StatefulWidget {
 
 class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
   final api = API();
+  final discogsAPI = DiscogsAPI();
 
-  void returnScreen(String id) {
+  void returnScreen(String id, String message) {
     Navigator.of(context).pop();
     Navigator.of(context).pop();
     Navigator.pop(context, id);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Disco deletado com sucesso!")),
+      SnackBar(content: Text(message)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _discogsIdController = TextEditingController();
     Album album = Album.fromJSON(widget.album as Map<String, dynamic>);
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +62,7 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
                                   placeholder: "Discogs ID",
                                   style: const TextStyle(
                                       fontSize: 16, color: Colors.grey),
-                                  onChanged: (value) {},
+                                  controller: _discogsIdController,
                                 ),
                               ],
                             ),
@@ -72,9 +75,14 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
                               ),
                               CupertinoDialogAction(
                                 child: const Text("Confirmar"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pop();
+                                onPressed: () async {
+                                  print(_discogsIdController.text);
+                                  print(album.id);
+                                  album.discogs = await discogsAPI
+                                      .getById(_discogsIdController.text);
+                                  await api.handleAlbum(album);
+                                  returnScreen(album.id,
+                                      "Discogs ID inserido com sucesso!");
                                 },
                               ),
                             ],
@@ -123,7 +131,8 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
                                 child: const Text("Sim"),
                                 onPressed: () async {
                                   await api.deleteAlbum(album);
-                                  returnScreen(album.id);
+                                  returnScreen(
+                                      album.id, "Disco deletado com sucesso!");
                                 },
                               ),
                             ],
@@ -269,7 +278,7 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
                       ),
                     ),
                   ),
-                 album.discogs.tracks.isEmpty
+                  album.discogs.tracks.isEmpty
                       ? Container(
                           alignment: Alignment.center,
                           height: 100,

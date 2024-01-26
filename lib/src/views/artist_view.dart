@@ -79,7 +79,10 @@ class _ArtistListViewState extends State<ArtistListView> {
               flexibleSpace: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.blueAccent, Colors.blue[900]!],
+                    colors: [
+                      Theme.of(context).cardColor,
+                      Theme.of(context).hoverColor,
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -122,7 +125,7 @@ class _ArtistListViewState extends State<ArtistListView> {
               actions: [
                 IconButton(
                   icon: const Icon(Icons.search),
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).hintColor,
                   onPressed: () {
                     setState(() {
                       if (_searchBar == true) {
@@ -136,7 +139,7 @@ class _ArtistListViewState extends State<ArtistListView> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.settings),
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).hintColor,
                   onPressed: () {
                     // Navigate to the settings page. If the user leaves and returns
                     // to the app after it has been killed while running in the
@@ -153,7 +156,7 @@ class _ArtistListViewState extends State<ArtistListView> {
                     ? const Center(child: CircularProgressIndicator())
                     : Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
+                          border: Border.all(color: Theme.of(context).canvasColor),
                           color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(15),
                         ),
