@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'settings_controller.dart';
-import '../views/main_view.dart';
+import '../settings/settings_controller.dart';
+import 'main_view.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -14,13 +14,13 @@ class SettingsView extends StatelessWidget {
 
   final SettingsController controller;
 
-  Widget container(Widget child) {
+  Widget container(BuildContext context, Widget child) {
     return Column(
       children: [
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
-            color: Colors.black26,
+            color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(5),
           ),
           height: 50,
@@ -63,6 +63,7 @@ class SettingsView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   container(
+                    context,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -77,6 +78,7 @@ class SettingsView extends StatelessWidget {
                     ),
                   ),
                   container(
+                    context,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -91,6 +93,7 @@ class SettingsView extends StatelessWidget {
                     ),
                   ),
                   container(
+                    context,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [

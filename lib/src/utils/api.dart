@@ -20,35 +20,38 @@ class API {
 
   Future<List<dynamic>> fetchAlbumByArtist(String artist) async {
     List<Album> albums = [];
+    try {
+      final response = await http
+          .post(Uri.https(apiURL, "/album/artist"),
+              headers: await getHeaders(),
+              body: jsonEncode(<String, String>{"artist": artist}))
+          .timeout(const Duration(seconds: 30));
 
-    final response = await http
-        .post(Uri.https(apiURL, "/album/artist"),
-            headers: await getHeaders(),
-            body: jsonEncode(<String, String>{"artist": artist}))
-        .timeout(const Duration(seconds: 30));
-
-    if (response.statusCode == 200) {
-      if (response.body.contains("Artist not found")) {
-        return [];
+      if (response.statusCode == 200) {
+        if (response.body.contains("Artist not found")) {
+          return [];
+        }
+        var decodedData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var album in decodedData) {
+          albums.add(Album.fromJSON(album));
+        }
+      } else if (response.statusCode == 401) {
+        fetchToken(force: true);
+        return fetchAlbumByArtist(artist);
+      } else {
+        throw Exception('Failed to load album');
       }
-      var decodedData = jsonDecode(utf8.decode(response.bodyBytes));
-      for (var album in decodedData) {
-        albums.add(Album.fromJSON(album));
-      }
-    } else if (response.statusCode == 401) {
-      fetchToken(force: true);
-      return fetchAlbumByArtist(artist);
-    } else {
-      throw Exception('Failed to load album');
+      return albums;
+    } catch (e) {
+      throw e.toString();
     }
-    return albums;
   }
 
   Future<List<Artist>> fetchArtists() async {
     print("fetchArtists");
 
     List<Artist> artists = [];
-
+    try{
     final response = await http
         .get(
           Uri.https(apiURL, "/artists"),
@@ -67,6 +70,9 @@ class API {
       return artists;
     } else {
       throw Exception('Failed to load album');
+    }
+    } catch (e){
+      throw e.toString();
     }
   }
 

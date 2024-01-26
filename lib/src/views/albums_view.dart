@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/src/views/handle_album.dart';
+import '../settings/settings_controller.dart';
 import '../models/album.dart';
 import '../utils/api.dart';
 import 'album_view.dart';
@@ -7,9 +8,10 @@ import 'album_view.dart';
 /// Displays detailed information about a SampleItem.
 class AlbumsItemDetailsView extends StatefulWidget {
   final Object artist;
-  const AlbumsItemDetailsView({super.key, required this.artist});
+  const AlbumsItemDetailsView({super.key, required this.artist, required this.controller});
 
   static const routeName = '/discograpy';
+  final SettingsController controller;
 
   @override
   State<AlbumsItemDetailsView> createState() => _AlbumsItemDetailsViewState();
@@ -29,68 +31,69 @@ class _AlbumsItemDetailsViewState extends State<AlbumsItemDetailsView> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
-                    color: Colors.black26,
+                    color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: ListView.separated(
-                    // Providing a restorationId allows the ListView to restore the
-                    // scroll position when a user leaves and returns to the app after it
-                    // has been killed while running in the background.
-                    restorationId: 'sampleItemListView',
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
                     itemCount: snapshot.data!.length,
                     separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
+                        const Divider(
+                          color: Colors.black38,
+                        ),
                     itemBuilder: (BuildContext context, int index) {
                       Album item = snapshot.data![index];
                       return Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: ListTile(
-                            title: Text(item.title),
-                            leading: snapshot.data![index].discogs.coverImage !=
-                                    ""
-                                ? Image.network(
-                                    snapshot.data![index].discogs.coverImage,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return const CircularProgressIndicator();
-                                    },
-                                  )
-                                : const IconButton(
-                                    iconSize: 50,
-                                    icon: Icon(Icons.album),
-                                    onPressed: null,
-                                  ),
-                            onTap: () async {
-                              final result = await Navigator.pushNamed(
-                                context,
-                                AlbumItemDetailsView.routeName,
-                                arguments: item.toJson(),
-                              );
-                              if (result != null) {
-                                setState(() {
-                                  if (result == "updated") {
-                                    return;
+                          title: Text(item.title),
+                          leading: snapshot.data![index].discogs.coverImage !=
+                                  ""
+                              ? Image.network(
+                                  snapshot.data![index].discogs.coverImage,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return const CircularProgressIndicator();
+                                  },
+                                )
+                              : const IconButton(
+                                  iconSize: 40,
+                                  icon: Icon(Icons.album),
+                                  onPressed: null,
+                                ),
+                          onTap: () async {
+                            final result = await Navigator.pushNamed(
+                              context,
+                              AlbumItemDetailsView.routeName,
+                              arguments: item.toJson(),
+                            );
+                            if (result != null) {
+                              setState(() {
+                                if (result == "updated") {
+                                  return;
+                                }
+                                int deleteIndex = -1;
+                                for (int i = 0;
+                                    i < snapshot.data!.length;
+                                    i++) {
+                                  if (snapshot.data![i].id == result) {
+                                    deleteIndex = i;
+                                    break;
                                   }
-                                  int deleteIndex = -1;
-                                  for (int i = 0;
-                                      i < snapshot.data!.length;
-                                      i++) {
-                                    if (snapshot.data![i].id == result) {
-                                      deleteIndex = i;
-                                      break;
-                                    }
-                                  }
-                                  if (deleteIndex != -1) {
-                                    snapshot.data!.removeAt(deleteIndex);
-                                  }
-                                });
-                              }
-                            }),
+                                }
+                                if (deleteIndex != -1) {
+                                  snapshot.data!.removeAt(deleteIndex);
+                                }
+                              });
+                            }
+                          },
+                        ),
                       );
                     },
                   ),

@@ -269,7 +269,7 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
                       ),
                     ),
                   ),
-                  album.discogs.tracks == []
+                 album.discogs.tracks.isEmpty
                       ? Container(
                           alignment: Alignment.center,
                           height: 100,

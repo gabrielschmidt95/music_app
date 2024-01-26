@@ -8,7 +8,7 @@ import 'views/artist_view.dart';
 import 'views/handle_album.dart';
 import 'views/main_view.dart';
 import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart';
+import 'views/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -59,8 +59,14 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: ThemeData(),
-          darkTheme: ThemeData.dark(),
+          theme: ThemeData(
+            brightness: Brightness.light,
+            primaryColor: Colors.white,
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            primaryColor:  Colors.black26,
+          ),
           themeMode: settingsController.themeMode,
 
           // Define a function to handle named routes in order to support
@@ -74,7 +80,8 @@ class MyApp extends StatelessWidget {
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
                   case AlbumsItemDetailsView.routeName:
-                    return AlbumsItemDetailsView(artist: arguments!);
+                    return AlbumsItemDetailsView(
+                        artist: arguments!, controller: settingsController);
                   case AlbumItemDetailsView.routeName:
                     return AlbumItemDetailsView(album: arguments!);
                   case HandleAlbumView.routeName:
@@ -84,7 +91,9 @@ class MyApp extends StatelessWidget {
                   case AuthView.routeName:
                   default:
                     return settingsController.user == null
-                        ? AuthView(controller: settingsController,)
+                        ? AuthView(
+                            controller: settingsController,
+                          )
                         : const ArtistListView();
                 }
               },
