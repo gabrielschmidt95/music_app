@@ -40,30 +40,55 @@ This is a music application built using Flutter. It allows users to listen to th
     >> assets/.env
     ```
 
-5. For IOS only
+5. Add Firebase 
 
-Add the following to your Info.plist file, located in <project root>/ios/Runner/Info.plist:
+[Firebase Installation](https://firebase.flutter.dev/docs/manual-installation/ios/)
+    
+[Firebase Google Sign-in](https://firebase.flutter.dev/docs/auth/social#google)
+
+6. For IOS only
+    
+    Add the following to your Info.plist file, located in 
+    
+    <project root>/ios/Runner/Info.plist:
+
     [Google Sign-in for iOS](https://developers.google.com/identity/sign-in/ios/start-integrating)
-    [Firebase Installation](https://firebase.flutter.dev/docs/manual-installation/ios/)
-    [Firebase Google Sign-in](https://firebase.flutter.dev/docs/auth/social#google)
-    ```
-    <!-- Google Sign-in Section -->
-		<key>CFBundleURLTypes</key>
-		<array>
-			<dict>
-				<key>CFBundleTypeRole</key>
-				<string>Editor</string>
-				<key>CFBundleURLSchemes</key>
-				<array>
-					<string>YOUR FIREBASE REVERSED_CLIENT_ID</string>
-				</array>
-			</dict>
-		</array>
-		<!-- End of the Google Sign-in Section -->
-    ```
+    
+        ```
+        <!-- Google Sign-in Section -->
+            <key>CFBundleURLTypes</key>
+            <array>
+                <dict>
+                    <key>CFBundleTypeRole</key>
+                    <string>Editor</string>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>YOUR FIREBASE REVERSED_CLIENT_ID</string>
+                    </array>
+                </dict>
+            </array>
+            <!-- End of the Google Sign-in Section -->
+        ```
+
+7. For Android Only
+
+    Add the following to your <project>/build.gradle
+
+    [Google Sign-in for Android](https://developers.google.com/identity/sign-in/android/start-integrating)
+
+    [Firebase Android](https://firebase.flutter.dev/docs/installation/android/)
+
+    - Add Fingerprint to your add (Need Java 8)      
+        ```
+        keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+        ```
+
+        ```
+        ./gradlew signingReport 
+        ```
 
 
-5. Run the application:
+8. Run the application:
 
     ```bash
     flutter run

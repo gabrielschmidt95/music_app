@@ -25,7 +25,8 @@ Future<dynamic> signInWithGoogle() async {
     );
 
     return await FirebaseAuth.instance.signInWithCredential(credential);
-  } on Exception catch (_) {
+  } on Exception catch (e) {
+    print(e.toString());
     return null;
   }
 }
