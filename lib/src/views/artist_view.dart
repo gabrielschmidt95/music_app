@@ -99,7 +99,7 @@ class _ArtistListViewState extends State<ArtistListView> {
                     hintStyle: const TextStyle(color: Colors.white),
                     suffixIcon: IconButton(
                       style: ButtonStyle(
-                        iconSize: MaterialStateProperty.all(
+                        iconSize: WidgetStatePropertyAll(
                             _searchBar == false ? 0 : 20),
                       ),
                       onPressed: () {
