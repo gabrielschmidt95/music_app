@@ -49,8 +49,8 @@ class _AuthViewState extends State<AuthView> {
                 ? const CircularProgressIndicator()
                 : OutlinedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.white),
-                      shape: MaterialStateProperty.all(
+                      backgroundColor: WidgetStateProperty.all(Colors.white),
+                      shape: WidgetStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40),
                         ),

@@ -6,7 +6,7 @@ import 'views/album_view.dart';
 import 'views/albums_view.dart';
 import 'views/artist_view.dart';
 import 'views/handle_album.dart';
-import 'views/main_view.dart';
+import 'views/auth_view.dart';
 import 'settings/settings_controller.dart';
 import 'views/settings_view.dart';
 

@@ -2,6 +2,30 @@ import '../models/discogs.dart';
 import '../models/spotify.dart';
 import 'package:intl/intl.dart';
 
+class Discs {
+  String discNumber;
+  String weight;
+  List<String> matriz;
+
+  Discs(this.discNumber, this.weight, this.matriz);
+
+  factory Discs.fromJSON(Map<String, dynamic> parsedJson) {
+    return Discs(
+      parsedJson['discNumber'] ?? "",
+      parsedJson['weight'] ?? "",
+      List<String>.from(parsedJson['matriz'] ?? []),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'discNumber': discNumber,
+      'weight': weight,
+      'matriz': matriz,
+    };
+  }
+}
+
 class Album {
   String id;
   int releaseYear;
@@ -18,23 +42,28 @@ class Album {
   String lote;
   Discogs discogs;
   Spotify spotify;
+  String obs;
+  List<Discs> discs;
 
   Album(
-      this.id,
-      this.releaseYear,
-      this.artist,
-      this.title,
-      this.media,
-      this.purchase,
-      this.origin,
-      this.editionYear,
-      this.ifpiMastering,
-      this.ifpiMould,
-      this.barcode,
-      this.matriz,
-      this.lote,
-      this.discogs,
-      this.spotify);
+    this.id,
+    this.releaseYear,
+    this.artist,
+    this.title,
+    this.media,
+    this.purchase,
+    this.origin,
+    this.editionYear,
+    this.ifpiMastering,
+    this.ifpiMould,
+    this.barcode,
+    this.matriz,
+    this.lote,
+    this.discogs,
+    this.spotify,
+    this.obs,
+    this.discs,
+  );
 
   factory Album.fromJSON(Map<String, dynamic> parsedJson) {
     return Album(
@@ -47,12 +76,18 @@ class Album {
       parsedJson['origin'] ?? "",
       parsedJson['editionYear'] ?? 0,
       parsedJson['ifpiMastering'] ?? "",
-      parsedJson['ifpiMould'].toString(),
+      parsedJson['ifpiMould'] == null ? "" :parsedJson['ifpiMould'].toString(),
       parsedJson['barcode'] ?? "",
       parsedJson['matriz'] ?? "",
       parsedJson['lote'] ?? "",
       Discogs.fromJSON(parsedJson['discogs'] ?? {}),
       Spotify.fromJSON(parsedJson['spotify'] ?? {}),
+      parsedJson['obs'] ?? "",
+      List<Discs>.from(
+        parsedJson['discs'] != null
+            ? parsedJson['discs'].map((disc) => Discs.fromJSON(disc)) ?? []
+            : [],
+      ),
     );
   }
 
@@ -85,6 +120,8 @@ class Album {
       'lote': lote,
       'discogs': discogs.toJson(),
       'spotify': spotify.toJson(),
+      'obs': obs,
+      'discs': discs.map((disc) => disc.toJson()).toList(),
     };
   }
 }

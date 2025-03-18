@@ -33,7 +33,7 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _discogsIdController = TextEditingController();
+    final TextEditingController discogsIdController = TextEditingController();
     Album album = Album.fromJSON(widget.album as Map<String, dynamic>);
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +62,7 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
                                   placeholder: "Discogs ID",
                                   style: const TextStyle(
                                       fontSize: 16, color: Colors.grey),
-                                  controller: _discogsIdController,
+                                  controller: discogsIdController,
                                 ),
                               ],
                             ),
@@ -76,10 +76,10 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
                               CupertinoDialogAction(
                                 child: const Text("Confirmar"),
                                 onPressed: () async {
-                                  print(_discogsIdController.text);
+                                  print(discogsIdController.text);
                                   print(album.id);
                                   album.discogs = await discogsAPI
-                                      .getById(_discogsIdController.text);
+                                      .getById(discogsIdController.text);
                                   await api.handleAlbum(album);
                                   returnScreen(album.id,
                                       "Discogs ID inserido com sucesso!");
@@ -242,17 +242,89 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
               ),
             ),
             ListTile(
-              leading: const Text("Matriz:"),
-              title: Text(
-                album.matriz,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
               leading: const Text("Lote:"),
               title: Text(
                 album.lote,
                 style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListTile(
+              leading: const Text("Observação:"),
+              title: Text(album.obs),
+            ),
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white10,
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: Colors.white30,
+                  width: 2,
+                ),
+              ),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text(
+                      "Discos",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: album.discs.length,
+                    itemBuilder: (context, index) {
+                      final item = album.discs[index];
+                      return Container(
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white10,
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                            color: Colors.white30,
+                            width: 2,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Divider(color: Colors.black),
+                            Text(
+                              item.discNumber,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            ListTile(
+                              leading: Text("Peso:"),
+                              title: Text(
+                                item.weight,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            ListTile(
+                              leading: Text("Matriz:"),
+                              title: Text(
+                                item.matriz
+                                    .map(
+                                      (e) => e.toString(),
+                                    )
+                                    .join(", "),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Divider(color: Colors.black)
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                ],
               ),
             ),
             // Add section for tracklist
